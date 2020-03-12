@@ -82,6 +82,8 @@ qemu-seccomp.o-libs := $(SECCOMP_LIBS)
 
 common-obj-$(CONFIG_FDT) += device_tree.o
 
+common-obj-y += xemu-version.o
+
 ######################################################################
 # qapi
 
