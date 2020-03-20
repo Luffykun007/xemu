@@ -36,6 +36,11 @@
 #include "sysemu/seccomp.h"
 #include "sysemu/tcg.h"
 
+#ifdef XBOX
+#undef main
+#define main qemu_main
+#else
+
 #ifdef CONFIG_SDL
 #if defined(__APPLE__) || defined(main)
 #include <SDL.h>
@@ -54,6 +59,7 @@ int main(int argc, char **argv)
 #define main qemu_main
 #endif /* CONFIG_COCOA */
 
+#endif // XBOX
 
 #include "qemu/error-report.h"
 #include "qemu/sockets.h"
@@ -2976,6 +2982,12 @@ int main(int argc, char **argv, char **envp)
 
     fake_argv[fake_argc++] = strdup("-display");
     fake_argv[fake_argc++] = strdup("xemu");
+
+#ifdef _WIN32
+    // FIXME: Create this dummy device to prevent logspam
+    fake_argv[fake_argc++] = strdup("-audiodev");
+    fake_argv[fake_argc++] = strdup("none,id=snd0");
+#endif
 
     printf("Created QEMU launch parameters: ");
     for (int i = 0; i < fake_argc; i++) {
