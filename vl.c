@@ -140,6 +140,7 @@ int main(int argc, char **argv)
 
 #include "ui/xemu-settings.h"
 #include "ui/xemu-notifications.h"
+#include "ui/xemu-net.h"
 
 #define MAX_VIRTIO_CONSOLES 1
 
@@ -4415,6 +4416,14 @@ int main(int argc, char **argv, char **envp)
         error_report_err(err);
         exit(1);
     }
+
+#ifdef XBOX
+    int xemu_net_enabled;
+    xemu_settings_get_bool(XEMU_SETTINGS_NETWORK_ENABLED, &xemu_net_enabled);
+    if (xemu_net_enabled) {
+        xemu_net_enable();
+    }
+#endif
 
     qemu_opts_foreach(qemu_find_opts("object"),
                       user_creatable_add_opts_foreach,
