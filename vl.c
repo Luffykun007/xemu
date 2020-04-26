@@ -38,7 +38,9 @@
 
 #ifdef XBOX
 #undef main
+int qemu_main(int argc, char **argv, char **envp);
 #define main qemu_main
+// main.c in xemu.c
 #else
 
 #ifdef CONFIG_SDL
